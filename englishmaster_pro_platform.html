@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="uz" class="dark h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EnglishMaster Pro - CEFR & IELTS Mastery Platform</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.4); border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.8); }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.03); }
+        }
+        .pulse-animation { animation: pulse-glow 2s infinite ease-in-out; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- MAIN NAVIGATION HEADER -->
+    <header id="main-header" class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand & Creator Label -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
+                    <div class="bg-gradient-to-tr from-indigo-600 to-purple-500 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-500/30">
+                        <i class="fa-solid fa-graduation-cap text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">EnglishMaster Pro</span>
+                            <span class="px-2 py-0.5 text-[10px] font-extrabold tracking-wide uppercase rounded-full bg-indigo-900/80 text-indigo-300 border border-indigo-700/50">IELTS 9.0</span>
+                        </div>
+                        <p class="text-xs font-semibold text-slate-400">Yaratuvchi: <span class="font-bold text-indigo-400">Sobirjonov Fayzulloh</span></p>
+                    </div>
+                </div>
+
+                <!-- Main Desktop Navigation -->
+                <nav class="hidden md:flex items-center space-x-1">
+                    <button onclick="switchTab('home')" id="nav-home" class="px-3.5 py-2 rounded-lg text-sm font-semibold text-indigo-400 bg-indigo-950/60 border border-indigo-800/40 transition">
+                        <i class="fa-solid fa-house mr-2"></i><span data-i18n="nav_home">Bosh sahifa</span>
+                    </button>
+                    <button onclick="switchTab('tests')" id="nav-tests" class="px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-indigo-400 hover:bg-slate-800 transition">
+                        <i class="fa-solid fa-file-signature mr-2"></i><span data-i18n="nav_tests">Imtihonlar</span>
+                    </button>
+                    <button onclick="switchTab('vault')" id="nav-vault" class="px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-indigo-400 hover:bg-slate-800 transition">
+                        <i class="fa-solid fa-book-bookmark mr-2"></i><span data-i18n="nav_vault">O'quv Baza</span>
+                    </button>
+                </nav>
+
+                <!-- Controls: Language Toggle -->
+                <div class="flex items-center space-x-3">
+                    <button onclick="toggleLanguage()" id="lang-btn" class="px-3 py-1.5 rounded-lg border border-slate-700 text-xs font-bold bg-slate-800 hover:bg-slate-700 transition flex items-center space-x-1.5 shadow">
+                        <i class="fa-solid fa-globe text-indigo-400"></i>
+                        <span id="lang-text" class="tracking-wider">UZ</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ISOLATED EXAM MODE HEADER (Hidden in Normal Navigation) -->
+    <header id="exam-header" class="hidden sticky top-0 z-50 bg-slate-950 text-white border-b border-slate-800 shadow-2xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Exam Level Badge & Section Breadcrumb -->
+                <div class="flex items-center space-x-3">
+                    <span id="exam-title-badge" class="px-3 py-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-xs font-black rounded-lg uppercase tracking-wider shadow">
+                        B2 Assessment
+                    </span>
+                    <div id="exam-section-pills" class="hidden md:flex space-x-2 text-xs">
+                        <span id="pill-listening" class="px-2.5 py-1 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-semibold">1. Listening</span>
+                        <span id="pill-reading" class="px-2.5 py-1 rounded bg-slate-800 text-slate-400 border border-slate-700 font-semibold">2. Reading</span>
+                        <span id="pill-grammar" class="px-2.5 py-1 rounded bg-slate-800 text-slate-400 border border-slate-700 font-semibold">3. Grammar</span>
+                        <span id="pill-writing" class="px-2.5 py-1 rounded bg-slate-800 text-slate-400 border border-slate-700 font-semibold">4. Writing</span>
+                    </div>
+                </div>
+
+                <!-- Exam Timer, Auto advance & Exit Button -->
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
+                        <label class="inline-flex items-center cursor-pointer text-xs font-medium text-slate-300">
+                            <input type="checkbox" id="auto-advance-toggle" checked class="sr-only peer">
+                            <div class="relative w-7 h-4 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600"></div>
+                            <span class="ms-2 hidden sm:inline text-[11px] font-semibold" data-i18n="auto_advance">Avto-o'tish</span>
+                        </label>
+                    </div>
+
+                    <div class="flex items-center space-x-2 font-mono text-base font-black text-amber-400 bg-amber-400/10 px-3 py-1.5 rounded-lg border border-amber-400/20 shadow-inner">
+                        <i class="fa-solid fa-clock text-amber-400 animate-pulse"></i>
+                        <span id="exam-timer">35:00</span>
+                    </div>
+
+                    <button onclick="confirmExitExam()" class="px-3 py-1.5 text-xs font-bold text-rose-400 hover:text-white hover:bg-rose-500/20 rounded-lg transition border border-rose-500/30">
+                        <i class="fa-solid fa-right-from-bracket mr-1"></i> <span data-i18n="exit_exam">Chiqish</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- ==================== TAB 1: HOME PAGE ==================== -->
+        <section id="tab-home" class="space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-slate-800 p-8 sm:p-12 shadow-2xl">
+                <div class="relative z-10 max-w-3xl">
+                    <span class="px-3.5 py-1 text-xs font-black uppercase tracking-widest bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full">
+                        Cambridge & CEFR Assessment Standard
+                    </span>
+                    <h1 class="text-3xl sm:text-5xl font-black mt-4 tracking-tight leading-tight text-white">
+                        EnglishMaster Pro Platformasi
+                    </h1>
+                    <p class="text-slate-300 text-base sm:text-lg mt-3 leading-relaxed">
+                        Ingliz tili darajangizni (A1 dan C2/IELTS gacha) rasmiy imtihon formatida aniqlang. 20 soniyalik tayyorgarlik vaqtiga ega Cambridge Listening, Dual-View Reading, va AI Grammar tahlil tizimi.
+                    </p>
+                    <div class="mt-8 flex flex-wrap gap-4">
+                        <button onclick="switchTab('tests')" class="px-6 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/30 transition transform hover:-translate-y-0.5 flex items-center">
+                            <i class="fa-solid fa-play text-sm mr-2.5"></i><span data-i18n="start_test_now">Sinovni Boshlash</span>
+                        </button>
+                        <button onclick="switchTab('vault')" class="px-6 py-3.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-xl transition border border-slate-700 flex items-center">
+                            <i class="fa-solid fa-book-open text-sm mr-2.5"></i><span data-i18n="explore_vault">O'quv Bazasini Ko'rish</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="absolute -right-10 -bottom-10 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+            </div>
+
+            <!-- Features Bar -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="p-5 rounded-2xl bg-slate-800/80 border border-slate-700/80 shadow-sm flex items-center space-x-4">
+                    <div class="p-3 bg-indigo-500/20 text-indigo-400 rounded-xl">
+                        <i class="fa-solid fa-layer-group text-2xl"></i>
+                    </div>
+                    <div>
+                        <div class="text-lg font-bold text-white">6 Daraja</div>
+                        <div class="text-xs text-slate-400">A1 Elementary - C2 IELTS</div>
+                    </div>
+                </div>
+                <div class="p-5 rounded-2xl bg-slate-800/80 border border-slate-700/80 shadow-sm flex items-center space-x-4">
+                    <div class="p-3 bg-emerald-500/20 text-emerald-400 rounded-xl">
+                        <i class="fa-solid fa-headphones text-2xl"></i>
+                    </div>
+                    <div>
+                        <div class="text-lg font-bold text-white">Cambridge Audio</div>
+                        <div class="text-xs text-slate-400">20s preview & seek bar</div>
+                    </div>
+                </div>
+                <div class="p-5 rounded-2xl bg-slate-800/80 border border-slate-700/80 shadow-sm flex items-center space-x-4">
+                    <div class="p-3 bg-amber-500/20 text-amber-400 rounded-xl">
+                        <i class="fa-solid fa-book-open text-2xl"></i>
+                    </div>
+                    <div>
+                        <div class="text-lg font-bold text-white">Split Reading</div>
+                        <div class="text-xs text-slate-400">Yonma-yon matn va savol</div>
+                    </div>
+                </div>
+                <div class="p-5 rounded-2xl bg-slate-800/80 border border-slate-700/80 shadow-sm flex items-center space-x-4">
+                    <div class="p-3 bg-rose-500/20 text-rose-400 rounded-xl">
+                        <i class="fa-solid fa-award text-2xl"></i>
+                    </div>
+                    <div>
+                        <div class="text-lg font-bold text-white">IELTS Predictor</div>
+                        <div class="text-xs text-slate-400">Band 1.0 - 9.0 hisobi</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Test Cards -->
+            <div class="space-y-4">
+                <h2 class="text-2xl font-bold flex items-center text-white">
+                    <i class="fa-solid fa-fire text-amber-500 mr-2.5"></i> <span data-i18n="popular_tests">Asoasiy Imtihon Modullari</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- B2 Card -->
+                    <div class="bg-slate-800/90 rounded-2xl p-6 border border-slate-700 shadow-md hover:border-indigo-500/50 transition">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 bg-indigo-950 text-indigo-300 border border-indigo-800/60 text-xs font-extrabold rounded-lg">B2 VANTAGE</span>
+                            <span class="text-xs text-slate-400 font-mono"><i class="fa-solid fa-clock mr-1"></i>35 daqiqa</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">B2 Upper-Intermediate</h3>
+                        <p class="text-xs text-slate-400 mb-6 leading-relaxed">Listening audio, Reading passage, B2 Grammar va Writing mashqlari to'liq jamlangan.</p>
+                        <button onclick="startExam('B2')" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition flex items-center justify-center shadow">
+                            <i class="fa-solid fa-play text-xs mr-2"></i> <span data-i18n="start">Boshlash</span>
+                        </button>
+                    </div>
+
+                    <!-- C1 Card -->
+                    <div class="bg-slate-800/90 rounded-2xl p-6 border border-slate-700 shadow-md hover:border-purple-500/50 transition">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 bg-purple-950 text-purple-300 border border-purple-800/60 text-xs font-extrabold rounded-lg">C1 ADVANCED</span>
+                            <span class="text-xs text-slate-400 font-mono"><i class="fa-solid fa-clock mr-1"></i>45 daqiqa</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">C1 Academic Mastery</h3>
+                        <p class="text-xs text-slate-400 mb-6 leading-relaxed">Murakkab Inversion, C1 akademik audio va ilmiy matnlarni tahlil qilish imtihoni.</p>
+                        <button onclick="startExam('C1')" class="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl transition flex items-center justify-center shadow">
+                            <i class="fa-solid fa-play text-xs mr-2"></i> <span data-i18n="start">Boshlash</span>
+                        </button>
+                    </div>
+
+                    <!-- IELTS Card -->
+                    <div class="bg-slate-800/90 rounded-2xl p-6 border border-slate-700 shadow-md hover:border-rose-500/50 transition">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 bg-rose-950 text-rose-300 border border-rose-800/60 text-xs font-extrabold rounded-lg">IELTS 1.0 - 9.0</span>
+                            <span class="text-xs text-slate-400 font-mono"><i class="fa-solid fa-clock mr-1"></i>40 daqiqa</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">IELTS Mock Predictor</h3>
+                        <p class="text-xs text-slate-400 mb-6 leading-relaxed">Rasmiy IELTS baholash mezonlari bo'yicha Band ballingizni aniq chiqarib beradi.</p>
+                        <button onclick="startExam('IELTS')" class="w-full py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl transition flex items-center justify-center shadow">
+                            <i class="fa-solid fa-play text-xs mr-2"></i> <span data-i18n="start">Boshlash</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: TESTS CATALOG ==================== -->
+        <section id="tab-tests" class="hidden space-y-6">
+            <div class="border-b border-slate-800 pb-4">
+                <h1 class="text-3xl font-black text-white" data-i18n="test_catalog_title">Imtihonlar Katalogi</h1>
+                <p class="text-slate-400 mt-1 text-sm" data-i18n="test_catalog_subtitle">A1 Boshlang'ich darajadan C2/IELTS gacha bo'lgan to'liq darajaviy sinovlar.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="tests-grid">
+                <!-- Dynamically populated via JavaScript -->
+            </div>
+        </section>
+
+        <!-- ==================== TAB 3: PRACTICE VAULT ==================== -->
+        <section id="tab-vault" class="hidden space-y-6">
+            <div class="border-b border-slate-800 pb-4">
+                <h1 class="text-3xl font-black text-white" data-i18n="vault_title">O'quv va Amaliyot Baza</h1>
+                <p class="text-slate-400 mt-1 text-sm" data-i18n="vault_subtitle">A1-C2 Grammatika qoidalari, Inversion iboralar va Writing shablonlari.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Sidebar Menu -->
+                <div class="space-y-2">
+                    <button onclick="showVaultSection('grammar')" id="vbtn-grammar" class="w-full text-left p-4 rounded-xl font-bold bg-indigo-600 text-white flex items-center justify-between shadow">
+                        <span><i class="fa-solid fa-book mr-2"></i> Grammatika Matrix (A1-C2)</span>
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                    <button onclick="showVaultSection('inversion')" id="vbtn-inversion" class="w-full text-left p-4 rounded-xl font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center justify-between border border-slate-700 transition">
+                        <span><i class="fa-solid fa-bolt mr-2"></i> Advanced Inversion (C1/C2)</span>
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                    <button onclick="showVaultSection('collocations')" id="vbtn-collocations" class="w-full text-left p-4 rounded-xl font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center justify-between border border-slate-700 transition">
+                        <span><i class="fa-solid fa-cubes mr-2"></i> Academic Collocations & Idioms</span>
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                    <button onclick="showVaultSection('writing')" id="vbtn-writing" class="w-full text-left p-4 rounded-xl font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center justify-between border border-slate-700 transition">
+                        <span><i class="fa-solid fa-pen-nib mr-2"></i> Writing Task 1 & Task 2 Templates</span>
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                </div>
+
+                <!-- Detail Content Box -->
+                <div class="lg:col-span-2 bg-slate-800 p-6 rounded-2xl border border-slate-700 min-h-[400px]" id="vault-content-pane">
+                    <!-- Dynamic rendering -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 4: ISOLATED EXAM MODE CONTAINER ==================== -->
+        <section id="tab-exam" class="hidden space-y-6">
+
+            <!-- SECTION BAR & INTERACTIVE QUESTION PALETTE -->
+            <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 shadow-xl space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-700/80 pb-3">
+                    <div class="flex items-center space-x-2">
+                        <span id="current-section-title" class="font-extrabold text-lg text-indigo-400">1. Listening Section</span>
+                        <span id="question-progress-text" class="text-xs bg-slate-900 border border-slate-700 px-2.5 py-1 rounded-md font-mono text-slate-300">
+                            Savol 1 / 15
+                        </span>
+                    </div>
+
+                    <!-- Navigation Controls -->
+                    <div class="flex items-center space-x-2">
+                        <button onclick="navigateQuestion(-1)" id="btn-prev-q" class="px-3 py-1.5 text-xs font-bold bg-slate-700 hover:bg-slate-600 rounded-lg transition disabled:opacity-40">
+                            <i class="fa-solid fa-arrow-left mr-1"></i> <span data-i18n="prev">Oldingi</span>
+                        </button>
+                        <button onclick="navigateQuestion(1)" id="btn-next-q" class="px-3 py-1.5 text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg transition">
+                            <span data-i18n="next">Keyingi</span> <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question Palette Navigator -->
+                <div id="question-palette" class="flex flex-wrap gap-2 pt-1">
+                    <!-- Generated via JS -->
+                </div>
+            </div>
+
+            <!-- CAMBRIDGE-STYLE REAL LISTENING SECTION AUDIO PLAYER -->
+            <div id="listening-player-container" class="hidden bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 text-white p-6 rounded-2xl border border-indigo-900/80 shadow-2xl space-y-4">
+
+                <!-- 20-SECOND PRE-LISTENING PREVIEW COUNTDOWN BANNER -->
+                <div id="listening-preview-banner" class="bg-amber-500/20 border border-amber-500/40 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 animate-fade-in">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-11 h-11 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-lg shadow-lg pulse-animation" id="preview-countdown-num">
+                            20
+                        </div>
+                        <div>
+                            <div class="font-bold text-amber-300 text-sm" data-i18n="preview_title">Savollarni o'rganib chiqish uchun 20 soniya vaqt!</div>
+                            <div class="text-xs text-amber-200/80" data-i18n="preview_subtitle">Audio ijro etilishidan oldin savollar va variantlarni diqqat bilan o'qib chiqing.</div>
+                        </div>
+                    </div>
+                    <button onclick="skipPreviewCountdown()" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold rounded-lg text-xs transition shadow-md whitespace-nowrap">
+                        <i class="fa-solid fa-forward mr-1.5"></i> <span data-i18n="skip_countdown">Sanoqni O'tkazish</span>
+                    </button>
+                </div>
+
+                <!-- MAIN INTERACTIVE AUDIO PLAYER WITH SEEK BAR -->
+                <div class="flex flex-col sm:flex-row items-center gap-4 pt-2">
+
+                    <!-- Play / Pause Button -->
+                    <button onclick="toggleAudioPlayPause()" id="audio-play-btn" class="w-12 h-12 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white flex items-center justify-center text-xl shadow-lg transition flex-shrink-0">
+                        <i class="fa-solid fa-play ml-1"></i>
+                    </button>
+
+                    <!-- Interactive Seek/Scrubber Bar -->
+                    <div class="flex-grow w-full space-y-1">
+                        <div class="flex justify-between text-xs font-mono text-slate-400">
+                            <span id="audio-current-time">00:00</span>
+                            <span id="audio-duration">01:30</span>
+                        </div>
+                        <div class="relative flex items-center">
+                            <input type="range" id="audio-seek-slider" min="0" max="100" value="0" step="0.5"
+                                onchange="seekAudio(this.value)" oninput="updateSeekVisual(this.value)"
+                                class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-400">
+                        </div>
+                    </div>
+
+                    <!-- Playback Speed Controls -->
+                    <div class="flex items-center space-x-2 flex-shrink-0">
+                        <i class="fa-solid fa-gauge-high text-xs text-slate-400"></i>
+                        <select id="audio-speed-select" onchange="changeAudioSpeed(this.value)" class="bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                            <option value="0.8">0.8x</option>
+                            <option value="1.0" selected>1.0x (Normal)</option>
+                            <option value="1.25">1.25x</option>
+                            <option value="1.5">1.5x</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTION CARD CONTAINER -->
+            <div id="question-display-card" class="bg-slate-800 rounded-2xl p-6 border border-slate-700 shadow-xl space-y-6">
+
+                <!-- SIDE-BY-SIDE READING PASSAGE (Visible during Reading section) -->
+                <div id="reading-passage-container" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-6 border-b border-slate-700 pb-6">
+                    <div class="bg-slate-900 p-5 rounded-xl border border-slate-700/80 h-80 overflow-y-auto custom-scrollbar text-sm leading-relaxed text-slate-200" id="reading-passage-text">
+                        <!-- Passage text dynamically rendered -->
+                    </div>
+                    <div class="p-4 bg-indigo-950/40 rounded-xl border border-indigo-900/50 text-xs text-slate-300">
+                        <h4 class="font-bold text-indigo-400 text-sm mb-1.5"><i class="fa-solid fa-circle-info mr-1"></i> Cambridge Reading Ko'rsatmasi:</h4>
+                        <p class="leading-relaxed">Chap tomondagi matnni diqqat bilan tahlil qiling va o'ng tomondagi mos savollarga javob bering.</p>
+                    </div>
+                </div>
+
+                <!-- QUESTION & OPTIONS CONTENT -->
+                <div class="space-y-4">
+                    <h3 id="question-text" class="text-lg sm:text-xl font-bold leading-snug text-white">
+                        Savol yuklanmoqda...
+                    </h3>
+
+                    <div id="options-container" class="space-y-3 pt-2">
+                        <!-- Options generated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXAM SUBMIT ACTION BAR -->
+            <div class="flex justify-between items-center bg-slate-800 p-4 rounded-2xl border border-slate-700 shadow-md">
+                <button onclick="confirmExitExam()" class="px-4 py-2 text-xs font-bold text-slate-400 hover:text-white transition">
+                    <i class="fa-solid fa-xmark mr-1"></i> Bekor qilish
+                </button>
+                <button onclick="submitExam()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-xl shadow-lg shadow-emerald-600/20 transition flex items-center">
+                    <i class="fa-solid fa-check-circle mr-2"></i> <span data-i18n="finish_exam">Imtihonni Yakunlash</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 5: COMPREHENSIVE SCORE REPORT ==================== -->
+        <section id="tab-results" class="hidden space-y-6">
+            <div class="bg-slate-800 rounded-3xl p-8 border border-slate-700 shadow-2xl space-y-8">
+
+                <!-- Header Result Banner -->
+                <div class="text-center space-y-3">
+                    <div class="inline-flex p-4 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800/60 shadow-lg">
+                        <i class="fa-solid fa-trophy text-4xl"></i>
+                    </div>
+                    <h1 class="text-3xl font-black text-white" data-i18n="result_title">Imtihon Natijalari va Tahlil</h1>
+                    <p class="text-slate-400 max-w-lg mx-auto text-xs sm:text-sm">
+                        Sinov muvaffaqiyatli topshirildi. Quyida sizning ballaringiz va har bir savol bo'yicha batafsil izohlar keltirilgan.
+                    </p>
+                </div>
+
+                <!-- Band Score Display Banner -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 border border-indigo-900/60 text-white p-6 rounded-2xl shadow-xl">
+                    <div class="text-center sm:border-r border-slate-800">
+                        <div class="text-xs uppercase tracking-wider text-indigo-300 font-bold">Umumiy Natija</div>
+                        <div id="res-score-number" class="text-4xl font-black mt-1 text-white">0 / 0</div>
+                        <div id="res-score-percentage" class="text-xs text-indigo-300 mt-1 font-mono">0%</div>
+                    </div>
+                    <div class="text-center sm:border-r border-slate-800">
+                        <div class="text-xs uppercase tracking-wider text-indigo-300 font-bold">CEFR Daraja</div>
+                        <div id="res-cefr-level" class="text-4xl font-black mt-1 text-amber-400">B2</div>
+                        <div class="text-xs text-indigo-300 mt-1">Standard Band</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-xs uppercase tracking-wider text-indigo-300 font-bold">IELTS Overall Estimate</div>
+                        <div id="res-ielts-band" class="text-4xl font-black mt-1 text-emerald-400">6.5</div>
+                        <div class="text-xs text-indigo-300 mt-1">Predicted Band Score</div>
+                    </div>
+                </div>
+
+                <!-- Module Breakdown Progress Bars -->
+                <div class="space-y-4">
+                    <h3 class="font-bold text-lg text-white border-b border-slate-700 pb-2">Bo'limlar Bo'yicha Natija</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="section-breakdown-grid">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Detailed Error Analysis -->
+                <div class="space-y-4">
+                    <h3 class="font-bold text-lg text-white border-b border-slate-700 pb-2" data-i18n="detailed_review">Xatolar Ustida Ishlash & Izohlar</h3>
+                    <div id="answers-review-container" class="space-y-4">
+                        <!-- Detailed review rendered dynamically -->
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="pt-4 flex flex-wrap gap-4 justify-center">
+                    <button onclick="switchTab('tests')" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition shadow">
+                        <i class="fa-solid fa-rotate-right mr-2"></i> Qaytadan Sinov Topshirish
+                    </button>
+                    <button onclick="switchTab('home')" class="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold rounded-xl transition">
+                        Bosh Sahifaga Qaytish
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER WITH PROMINENT CREATOR BRANDING -->
+    <footer id="main-footer" class="bg-slate-950 border-t border-slate-800 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2.5 bg-indigo-600 text-white rounded-xl shadow-md">
+                        <i class="fa-solid fa-graduation-cap text-lg"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-white text-base">EnglishMaster Pro</div>
+                        <p class="text-xs text-slate-400">Cambridge CEFR & IELTS Assessment Platform</p>
+                    </div>
+                </div>
+
+                <!-- Prominent Developer Credit -->
+                <div class="bg-slate-900 border border-slate-800 px-6 py-3 rounded-2xl text-center shadow-lg">
+                    <span class="text-xs text-slate-400 block font-medium">Platforma Muallifi va Dasturchisi:</span>
+                    <span class="text-sm font-black text-indigo-400 tracking-wide">Yaratuvchi: Sobirjonov Fayzulloh</span>
+                </div>
+
+                <div class="text-xs text-slate-500 text-center md:text-right">
+                    © 2026 EnglishMaster Pro. Barcha huquqlar himoyalangan.<br>Designed for Excellence in English.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* -------------------------------------------------------------------------- */
+        /* GLOBAL STATE & VARIABLES                                                  */
+        /* -------------------------------------------------------------------------- */
+        let currentLanguage = 'UZ';
+        let currentTab = 'home';
+        let activeExamData = null;
+        let currentQuestionIndex = 0;
+        let userAnswers = {};
+        let examTimerInterval = null;
+        let examTimeRemaining = 0;
+
+        // Cambridge Listening Audio Engine State
+        let previewCountdownInterval = null;
+        let previewTimeRemaining = 20;
+        let isAudioPlaying = false;
+        let audioPlaybackSpeed = 1.0;
+        let audioVirtualCurrentTime = 0;
+        let audioVirtualDuration = 90; // 1 minute 30 seconds
+        let audioTimerInterval = null;
+
+        /* -------------------------------------------------------------------------- */
+        /* DICTIONARY TRANSLATIONS                                                   */
+        /* -------------------------------------------------------------------------- */
+        const i18n = {
+            UZ: {
+                nav_home: "Bosh sahifa",
+                nav_tests: "Imtihonlar",
+                nav_vault: "O'quv Baza",
+                start_test_now: "Sinovni Boshlash",
+                explore_vault: "O'quv Bazasini Ko'rish",
+                popular_tests: "Asosiy Imtihon Modullari",
+                start: "Boshlash",
+                test_catalog_title: "Imtihonlar Katalogi",
+                test_catalog_subtitle: "A1 Boshlang'ich darajadan C2/IELTS gacha bo'lgan to'liq darajaviy sinovlar.",
+                vault_title: "O'quv va Amaliyot Baza",
+                vault_subtitle: "A1-C2 Grammatika qoidalari, Inversion iboralar va Writing shablonlari.",
+                auto_advance: "Avto-o'tish",
+                exit_exam: "Chiqish",
+                prev: "Oldingi",
+                next: "Keyingi",
+                preview_title: "Savollarni o'rganib chiqish uchun 20 soniya vaqt!",
+                preview_subtitle: "Audio ijro etilishidan oldin savollar va variantlarni diqqat bilan o'qib chiqing.",
+                skip_countdown: "Sanoqni O'tkazish",
+                finish_exam: "Imtihonni Yakunlash",
+                result_title: "Imtihon Natijalari va Tahlil",
+                detailed_review: "Xatolar Ustida Ishlash & Izohlar"
+            },
+            EN: {
+                nav_home: "Home",
+                nav_tests: "Exams",
+                nav_vault: "Study Vault",
+                start_test_now: "Start Test Now",
+                explore_vault: "Explore Materials",
+                popular_tests: "Featured Exam Modules",
+                start: "Start Exam",
+                test_catalog_title: "Exam Catalog",
+                test_catalog_subtitle: "Comprehensive level assessment from A1 Elementary up to C2/IELTS.",
+                vault_title: "Study & Practice Vault",
+                vault_subtitle: "A1-C2 Grammar rules, Advanced Inversions & Essay Templates.",
+                auto_advance: "Auto-advance",
+                exit_exam: "Exit Exam",
+                prev: "Previous",
+                next: "Next",
+                preview_title: "20 Seconds Pre-listening Preview Countdown!",
+                preview_subtitle: "Examine questions and options carefully before the audio playback starts.",
+                skip_countdown: "Skip Countdown",
+                finish_exam: "Finish Exam",
+                result_title: "Exam Results & Analysis",
+                detailed_review: "Detailed Error Analysis & Explanations"
+            }
+        };
+
+        /* -------------------------------------------------------------------------- */
+        /* QUESTION BANK (A1, A2, B1, B2, C1, C2/IELTS)                               */
+        /* -------------------------------------------------------------------------- */
+        const EXAM_BANK = {
+            B2: {
+                title: "B2 Upper-Intermediate Standard",
+                durationSeconds: 2100, // 35 min
+                questions: [
+                    {
+                        id: 1,
+                        section: "Listening",
+                        audioScript: "Welcome to the Cambridge University orientation. Please note that the main reference library on the third floor will be closed for renovation starting next Monday. Alternative quiet study areas are available on the second floor near the cafeteria.",
+                        text: "Where can students find quiet study areas during the renovation next week?",
+                        options: [
+                            "On the third floor reference room",
+                            "On the second floor near the cafeteria",
+                            "Outside in the university garden",
+                            "The library will be completely closed"
+                        ],
+                        correct: 1,
+                        explanation: "The audio script explicitly states that alternative quiet study areas are available on the second floor near the cafeteria."
+                    },
+                    {
+                        id: 2,
+                        section: "Listening",
+                        audioScript: "Doctor Higgins recommended taking the prescribed multivitamin supplement every morning right before breakfast to ensure optimum nutrient absorption.",
+                        text: "When does Doctor Higgins advise taking the multivitamin supplement?",
+                        options: [
+                            "Right after dinner",
+                            "Every morning right before breakfast",
+                            "Before going to bed at night",
+                            "During lunch break"
+                        ],
+                        correct: 1,
+                        explanation: "The speaker clearly mentions 'every morning right before breakfast to ensure optimum nutrient absorption'."
+                    },
+                    {
+                        id: 3,
+                        section: "Reading",
+                        passage: "The Shift Towards Sustainable Urban Infrastructure.\n\nOver the past decade, major metropolitan centers have accelerated their transition toward renewable energy sources. Solar power and wind energy now account for over 38% of municipal electricity consumption in leading green cities. Urban planners emphasize that decentralized smart power grids significantly reduce energy transmission losses and increase resilience against severe weather events. Additionally, falling solar cell costs have made rooftop solar installations financially viable for ordinary homeowners.",
+                        text: "According to the passage, what is a primary advantage of decentralized smart power grids?",
+                        options: [
+                            "They completely eliminate fossil fuel reliance",
+                            "They reduce energy transmission losses and increase weather resilience",
+                            "They double the price of municipal electricity",
+                            "They require no financial investment"
+                        ],
+                        correct: 1,
+                        explanation: "The text highlights that decentralized smart grids 'reduce energy transmission losses and increase resilience against severe weather events'."
+                    },
+                    {
+                        id: 4,
+                        section: "Grammar",
+                        text: "Had I known about the schedule change earlier, I __________ at the conference center so early.",
+                        options: [
+                            "would not arrive",
+                            "would not have arrived",
+                            "will not arrive",
+                            "had not arrived"
+                        ],
+                        correct: 1,
+                        explanation: "This sentence requires a Third Conditional inverted structure (Had I known... I would not have arrived)."
+                    },
+                    {
+                        id: 5,
+                        section: "Writing",
+                        text: "Which formal linking phrase is best suited to introduce a contrasting argument in an academic essay?",
+                        options: [
+                            "Conversely / On the other hand",
+                            "By the way",
+                            "And also",
+                            "To put it simple"
+                        ],
+                        correct: 0,
+                        explanation: "'Conversely' and 'On the other hand' are formal academic connectors used for introducing contrasting points."
+                    }
+                ]
+            },
+            C1: {
+                title: "C1 Advanced Academic Exam",
+                durationSeconds: 2700,
+                questions: [
+                    {
+                        id: 1,
+                        section: "Listening",
+                        audioScript: "Recent cognitive neuro-scientific studies indicate that chronic multi-tasking significantly impairs working memory capacity and reduces problem-solving efficiency.",
+                        text: "What effect does chronic multi-tasking have according to neuro-scientific studies?",
+                        options: [
+                            "It enhances problem-solving speed",
+                            "It impairs working memory capacity and reduces efficiency",
+                            "It has no measurable cognitive effect",
+                            "It triples long-term recall"
+                        ],
+                        correct: 1,
+                        explanation: "The research explicitly states that multi-tasking impairs working memory capacity and reduces efficiency."
+                    },
+                    {
+                        id: 2,
+                        section: "Grammar",
+                        text: "Not until the final financial audit was released __________ the extent of the budgetary discrepancy.",
+                        options: [
+                            "did the board realize",
+                            "the board realized",
+                            "has the board realized",
+                            "the board had realized"
+                        ],
+                        correct: 0,
+                        explanation: "Negative adverbial phrase 'Not until...' placed at the start requires subject-auxiliary inversion (did the board realize)."
+                    }
+                ]
+            },
+            IELTS: {
+                title: "IELTS Band Score Predictor Mock",
+                durationSeconds: 2400,
+                questions: [
+                    {
+                        id: 1,
+                        section: "Listening",
+                        audioScript: "The university sports center operates from 6:00 AM to 10:00 PM on weekdays, whereas weekend operating hours are strictly limited from 8:00 AM to 6:00 PM.",
+                        text: "What are the weekend operating hours for the university sports center?",
+                        options: [
+                            "6:00 AM to 10:00 PM",
+                            "8:00 AM to 6:00 PM",
+                            "8:00 AM to 10:00 PM",
+                            "Closed on weekends"
+                        ],
+                        correct: 1,
+                        explanation: "The audio specifies that weekend operating hours are limited from 8:00 AM to 6:00 PM."
+                    },
+                    {
+                        id: 2,
+                        section: "Grammar",
+                        text: "The municipal government has instituted stringent measures in order to __________ urban pollution.",
+                        options: ["curtail", "expand", "foster", "prolong"],
+                        correct: 0,
+                        explanation: "'Curtail' means to reduce or restrict in extent or quantity."
+                    }
+                ]
+            }
+        };
+
+        /* -------------------------------------------------------------------------- */
+        /* TAB SWITCHING & UI NAVIGATION                                              */
+        /* -------------------------------------------------------------------------- */
+        function switchTab(tabId) {
+            currentTab = tabId;
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+
+            const target = document.getElementById(`tab-${tabId}`);
+            if (target) target.classList.remove('hidden');
+
+            ['home', 'tests', 'vault'].forEach(id => {
+                const btn = document.getElementById(`nav-${id}`);
+                if (btn) {
+                    if (id === tabId) {
+                        btn.className = "px-3.5 py-2 rounded-lg text-sm font-semibold text-indigo-400 bg-indigo-950/60 border border-indigo-800/40 transition";
+                    } else {
+                        btn.className = "px-3.5 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-indigo-400 hover:bg-slate-800 transition";
+                    }
+                }
+            });
+
+            if (tabId === 'tests') renderTestsCatalog();
+            if (tabId === 'vault') showVaultSection('grammar');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /* EXAM STARTER & ISOLATED MODE                                               */
+        /* -------------------------------------------------------------------------- */
+        function startExam(levelKey) {
+            const template = EXAM_BANK[levelKey] || EXAM_BANK['B2'];
+            activeExamData = JSON.parse(JSON.stringify(template));
+            currentQuestionIndex = 0;
+            userAnswers = {};
+
+            // Hide Main Navigation & Footer to isolate exam environment completely
+            document.getElementById('main-header').classList.add('hidden');
+            document.getElementById('main-footer').classList.add('hidden');
+            document.getElementById('exam-header').classList.remove('hidden');
+
+            document.getElementById('exam-title-badge').innerText = activeExamData.title;
+
+            examTimeRemaining = activeExamData.durationSeconds;
+            clearInterval(examTimerInterval);
+            examTimerInterval = setInterval(updateExamTimer, 1000);
+            updateExamTimer();
+
+            switchTab('exam');
+            renderQuestion();
+        }
+
+        function updateExamTimer() {
+            if (examTimeRemaining <= 0) {
+                clearInterval(examTimerInterval);
+                submitExam();
+                return;
+            }
+            examTimeRemaining--;
+            const mins = Math.floor(examTimeRemaining / 60);
+            const secs = examTimeRemaining % 60;
+            document.getElementById('exam-timer').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function confirmExitExam() {
+            if (confirm("Haqiqatan ham imtihondan chiqmoqchimisiz? Barcha kiritilgan javoblar saqlanmaydi.")) {
+                exitExamMode();
+            }
+        }
+
+        function exitExamMode() {
+            clearInterval(examTimerInterval);
+            stopAudioSpeech();
+            clearInterval(previewCountdownInterval);
+
+            document.getElementById('main-header').classList.remove('hidden');
+            document.getElementById('main-footer').classList.remove('hidden');
+            document.getElementById('exam-header').classList.add('hidden');
+
+            switchTab('home');
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /* QUESTION RENDERER & PALETTE LOGIC                                         */
+        /* -------------------------------------------------------------------------- */
+        function renderQuestion() {
+            if (!activeExamData || !activeExamData.questions.length) return;
+
+            const q = activeExamData.questions[currentQuestionIndex];
+            const total = activeExamData.questions.length;
+
+            // Render Question Palette
+            const paletteContainer = document.getElementById('question-palette');
+            paletteContainer.innerHTML = '';
+            activeExamData.questions.forEach((item, idx) => {
+                const btn = document.createElement('button');
+                const isAnswered = userAnswers[item.id] !== undefined;
+                const isCurrent = idx === currentQuestionIndex;
+
+                let cls = "w-8 h-8 text-xs font-bold rounded-lg transition flex items-center justify-center ";
+                if (isCurrent) {
+                    cls += "bg-indigo-600 text-white ring-2 ring-indigo-400 ring-offset-2 ring-offset-slate-900 shadow-lg";
+                } else if (isAnswered) {
+                    cls += "bg-emerald-950 text-emerald-300 border border-emerald-700/80";
+                } else {
+                    cls += "bg-slate-900 text-slate-400 border border-slate-700 hover:bg-slate-700 hover:text-white";
+                }
+                btn.className = cls;
+                btn.innerText = idx + 1;
+                btn.onclick = () => { currentQuestionIndex = idx; renderQuestion(); };
+                paletteContainer.appendChild(btn);
+            });
+
+            // Section Info
+            document.getElementById('current-section-title').innerText = `${q.section} Section`;
+            document.getElementById('question-progress-text').innerText = `Savol ${currentQuestionIndex + 1} / ${total}`;
+
+            // Section Pills Highlighting
+            const secLower = q.section.toLowerCase();
+            ['listening', 'reading', 'grammar', 'writing'].forEach(s => {
+                const pill = document.getElementById(`pill-${s}`);
+                if (pill) {
+                    if (secLower.includes(s)) {
+                        pill.className = "px-2.5 py-1 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-semibold";
+                    } else {
+                        pill.className = "px-2.5 py-1 rounded bg-slate-900 text-slate-500 border border-slate-800 font-semibold";
+                    }
+                }
+            });
+
+            // Listening Section Setup
+            const listeningContainer = document.getElementById('listening-player-container');
+            if (q.section === 'Listening') {
+                listeningContainer.classList.remove('hidden');
+                initListeningSection(q);
+            } else {
+                listeningContainer.classList.add('hidden');
+                stopAudioSpeech();
+                clearInterval(previewCountdownInterval);
+            }
+
+            // Reading Section Setup
+            const readingPassageBox = document.getElementById('reading-passage-container');
+            if (q.section === 'Reading' && q.passage) {
+                readingPassageBox.classList.remove('hidden');
+                document.getElementById('reading-passage-text').innerText = q.passage;
+            } else {
+                readingPassageBox.classList.add('hidden');
+            }
+
+            // Options Rendering
+            document.getElementById('question-text').innerText = `${currentQuestionIndex + 1}. ${q.text}`;
+            const optionsBox = document.getElementById('options-container');
+            optionsBox.innerHTML = '';
+
+            q.options.forEach((optText, optIdx) => {
+                const optBtn = document.createElement('button');
+                const isSelected = userAnswers[q.id] === optIdx;
+
+                optBtn.className = `w-full text-left p-4 rounded-xl border text-sm font-medium transition flex items-center justify-between ${
+                    isSelected 
+                    ? 'border-indigo-500 bg-indigo-950/80 text-indigo-200 shadow-md ring-1 ring-indigo-500/40' 
+                    : 'border-slate-700 bg-slate-900 hover:border-slate-600 hover:bg-slate-850 text-slate-200'
+                }`;
+
+                optBtn.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <span class="w-6 h-6 rounded-full border border-slate-600 flex items-center justify-center text-xs font-bold ${isSelected ? 'bg-indigo-600 text-white border-indigo-600' : 'text-slate-400'}">
+                            ${String.fromCharCode(65 + optIdx)}
+                        </span>
+                        <span>${optText}</span>
+                    </div>
+                    ${isSelected ? '<i class="fa-solid fa-circle-check text-indigo-400 text-base"></i>' : ''}
+                `;
+
+                optBtn.onclick = () => selectOption(q.id, optIdx);
+                optionsBox.appendChild(optBtn);
+            });
+
+            document.getElementById('btn-prev-q').disabled = currentQuestionIndex === 0;
+        }
+
+        function selectOption(qId, optionIndex) {
+            userAnswers[qId] = optionIndex;
+            renderQuestion();
+
+            const autoAdvance = document.getElementById('auto-advance-toggle').checked;
+            if (autoAdvance && currentQuestionIndex < activeExamData.questions.length - 1) {
+                setTimeout(() => {
+                    navigateQuestion(1);
+                }, 350);
+            }
+        }
+
+        function navigateQuestion(direction) {
+            const nextIdx = currentQuestionIndex + direction;
+            if (nextIdx >= 0 && nextIdx < activeExamData.questions.length) {
+                currentQuestionIndex = nextIdx;
+                renderQuestion();
+            }
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /* CAMBRIDGE AUDIO PLAYER ENGINE (WEB SPEECH API)                             */
+        /* -------------------------------------------------------------------------- */
+        function initListeningSection(questionObj) {
+            const previewBanner = document.getElementById('listening-preview-banner');
+            previewBanner.classList.remove('hidden');
+
+            previewTimeRemaining = 20;
+            document.getElementById('preview-countdown-num').innerText = previewTimeRemaining;
+
+            clearInterval(previewCountdownInterval);
+            previewCountdownInterval = setInterval(() => {
+                previewTimeRemaining--;
+                document.getElementById('preview-countdown-num').innerText = previewTimeRemaining;
+                if (previewTimeRemaining <= 0) {
+                    clearInterval(previewCountdownInterval);
+                    previewBanner.classList.add('hidden');
+                    playCambridgeAudioScript(questionObj.audioScript);
+                }
+            }, 1000);
+        }
+
+        function skipPreviewCountdown() {
+            clearInterval(previewCountdownInterval);
+            document.getElementById('listening-preview-banner').classList.add('hidden');
+            const q = activeExamData.questions[currentQuestionIndex];
+            playCambridgeAudioScript(q.audioScript);
+        }
+
+        function playCambridgeAudioScript(textToSpeak) {
+            stopAudioSpeech();
+
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(textToSpeak || "Cambridge listening default audio track.");
+                utterance.lang = 'en-US';
+                utterance.rate = audioPlaybackSpeed;
+
+                utterance.onstart = () => {
+                    isAudioPlaying = true;
+                    updateAudioPlayBtnIcon();
+                    startVirtualAudioProgress();
+                };
+
+                utterance.onend = () => {
+                    isAudioPlaying = false;
+                    updateAudioPlayBtnIcon();
+                    clearInterval(audioTimerInterval);
+                };
+
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Sizning brauzeringiz audio nutq sintezini qo'llab-quvvatlamaydi.");
+            }
+        }
+
+        function toggleAudioPlayPause() {
+            if ('speechSynthesis' in window) {
+                if (window.speechSynthesis.speaking) {
+                    if (window.speechSynthesis.paused) {
+                        window.speechSynthesis.resume();
+                        isAudioPlaying = true;
+                    } else {
+                        window.speechSynthesis.pause();
+                        isAudioPlaying = false;
+                    }
+                } else {
+                    const q = activeExamData.questions[currentQuestionIndex];
+                    playCambridgeAudioScript(q.audioScript);
+                }
+                updateAudioPlayBtnIcon();
+            }
+        }
+
+        function stopAudioSpeech() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+            isAudioPlaying = false;
+            clearInterval(audioTimerInterval);
+            audioVirtualCurrentTime = 0;
+            updateAudioPlayBtnIcon();
+        }
+
+        function updateAudioPlayBtnIcon() {
+            const btn = document.getElementById('audio-play-btn');
+            if (isAudioPlaying) {
+                btn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-play ml-0.5"></i>';
+            }
+        }
+
+        function changeAudioSpeed(val) {
+            audioPlaybackSpeed = parseFloat(val);
+            if (isAudioPlaying) {
+                const q = activeExamData.questions[currentQuestionIndex];
+                playCambridgeAudioScript(q.audioScript);
+            }
+        }
+
+        function startVirtualAudioProgress() {
+            clearInterval(audioTimerInterval);
+            audioTimerInterval = setInterval(() => {
+                if (isAudioPlaying && audioVirtualCurrentTime < audioVirtualDuration) {
+                    audioVirtualCurrentTime += 1;
+                    const pct = (audioVirtualCurrentTime / audioVirtualDuration) * 100;
+                    document.getElementById('audio-seek-slider').value = pct;
+                    updateSeekVisual(pct);
+                }
+            }, 1000);
+        }
+
+        function updateSeekVisual(valuePct) {
+            const currentSec = Math.floor((valuePct / 100) * audioVirtualDuration);
+            document.getElementById('audio-current-time').innerText = formatTime(currentSec);
+            document.getElementById('audio-duration').innerText = formatTime(audioVirtualDuration);
+        }
+
+        function seekAudio(valuePct) {
+            audioVirtualCurrentTime = Math.floor((valuePct / 100) * audioVirtualDuration);
+            updateSeekVisual(valuePct);
+        }
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /* EXAM SUBMISSION & SCORE COMPUTATION                                       */
+        /* -------------------------------------------------------------------------- */
+        function submitExam() {
+            clearInterval(examTimerInterval);
+            stopAudioSpeech();
+
+            let totalQuestions = activeExamData.questions.length;
+            let correctCount = 0;
+            const sectionScores = {};
+
+            activeExamData.questions.forEach(q => {
+                if (!sectionScores[q.section]) sectionScores[q.section] = { total: 0, correct: 0 };
+                sectionScores[q.section].total++;
+
+                if (userAnswers[q.id] === q.correct) {
+                    correctCount++;
+                    sectionScores[q.section].correct++;
+                }
+            });
+
+            const percentage = Math.round((correctCount / totalQuestions) * 100);
+
+            // Compute IELTS Band & CEFR Grade
+            let ieltsBand = "5.5";
+            let cefrLevel = "B1";
+            if (percentage >= 90) { ieltsBand = "8.5 - 9.0"; cefrLevel = "C2"; }
+            else if (percentage >= 75) { ieltsBand = "7.0 - 8.0"; cefrLevel = "C1"; }
+            else if (percentage >= 60) { ieltsBand = "6.0 - 6.5"; cefrLevel = "B2"; }
+            else if (percentage >= 45) { ieltsBand = "5.0 - 5.5"; cefrLevel = "B1"; }
+            else { ieltsBand = "4.0 - 4.5"; cefrLevel = "A2"; }
+
+            // Update UI
+            document.getElementById('res-score-number').innerText = `${correctCount} / ${totalQuestions}`;
+            document.getElementById('res-score-percentage').innerText = `${percentage}% to'g'ri javob`;
+            document.getElementById('res-cefr-level').innerText = cefrLevel;
+            document.getElementById('res-ielts-band').innerText = ieltsBand;
+
+            // Section progress bars
+            const secGrid = document.getElementById('section-breakdown-grid');
+            secGrid.innerHTML = '';
+            for (const [secName, data] of Object.entries(sectionScores)) {
+                const secPct = Math.round((data.correct / data.total) * 100);
+                secGrid.innerHTML += `
+                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
+                        <div class="flex justify-between text-xs font-bold mb-1.5 text-slate-300">
+                            <span>${secName}</span>
+                            <span>${data.correct}/${data.total} (${secPct}%)</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                            <div class="h-full bg-indigo-500 rounded-full" style="width: ${secPct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Error Analysis
+            const reviewBox = document.getElementById('answers-review-container');
+            reviewBox.innerHTML = '';
+
+            activeExamData.questions.forEach((q, idx) => {
+                const userAns = userAnswers[q.id];
+                const isCorrect = userAns === q.correct;
+
+                reviewBox.innerHTML += `
+                    <div class="p-4 rounded-xl border ${isCorrect ? 'border-emerald-800/80 bg-emerald-950/20' : 'border-rose-800/80 bg-rose-950/20'} space-y-2">
+                        <div class="flex items-center justify-between text-xs font-bold">
+                            <span class="${isCorrect ? 'text-emerald-400' : 'text-rose-400'}">
+                                ${isCorrect ? '<i class="fa-solid fa-circle-check mr-1"></i> To\'g\'ri' : '<i class="fa-solid fa-circle-xmark mr-1"></i> Noto\'g\'ri'}
+                            </span>
+                            <span class="text-slate-400 font-mono">${q.section}</span>
+                        </div>
+                        <div class="font-bold text-sm text-white">${idx + 1}. ${q.text}</div>
+                        <div class="text-xs space-y-1 text-slate-300">
+                            <div>Sizning javobingiz: <span class="font-semibold text-slate-100">${userAns !== undefined ? q.options[userAns] : 'Javob berilmagan'}</span></div>
+                            <div>To'g'ri javob: <span class="font-semibold text-emerald-400">${q.options[q.correct]}</span></div>
+                        </div>
+                        <div class="text-xs text-slate-400 bg-slate-900 p-3 rounded-lg border border-slate-800 mt-2">
+                            <span class="font-bold text-indigo-400">Izoh:</span> ${q.explanation}
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('main-header').classList.remove('hidden');
+            document.getElementById('main-footer').classList.remove('hidden');
+            document.getElementById('exam-header').classList.add('hidden');
+
+            switchTab('results');
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /* TESTS CATALOG DISPLAY                                                      */
+        /* -------------------------------------------------------------------------- */
+        function renderTestsCatalog() {
+            const grid = document.getElementById('tests-grid');
+            grid.innerHTML = '';
+
+            const catalog = [
+                { key: 'A1', title: 'A1 Beginner Foundations', desc: 'Boshlang\'ich lug\'at va sodda strukturani aniqlash.', badge: 'A1 Beginner', color: 'indigo' },
+                { key: 'A2', title: 'A2 Elementary Assessment', desc: 'Sodda dialoglar va matnlarni tushunish ko\'nikmasi.', badge: 'A2 Elementary', color: 'blue' },
+                { key: 'B1', title: 'B1 Intermediate Standard', desc: 'Sayohat, ta\'lim va muloqot grammatikasi.', badge: 'B1 Intermediate', color: 'teal' },
+                { key: 'B2', title: 'B2 Upper-Intermediate', desc: 'To\'liq 4-bo\'limli xalqaro imtihon simulyatsiyasi.', badge: 'B2 Vantage', color: 'indigo' },
+                { key: 'C1', title: 'C1 Advanced Academic', desc: 'Akademik audio, ilmiy matnlar va Inversion testi.', badge: 'C1 Advanced', color: 'purple' },
+                { key: 'IELTS', title: 'IELTS Overall Predictor', desc: 'IELTS Band ballingizni aniq bashorat qiluvchi imtihon.', badge: 'IELTS Academic', color: 'rose' }
+            ];
+
+            catalog.forEach(item => {
+                grid.innerHTML += `
+                    <div class="bg-slate-800/90 rounded-2xl p-6 border border-slate-700 shadow-md hover:border-indigo-500/50 transition">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 bg-${item.color}-950 text-${item.color}-300 border border-${item.color}-800/60 text-xs font-bold rounded-lg">${item.badge}</span>
+                            <i class="fa-solid fa-certificate text-slate-500"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">${item.title}</h3>
+                        <p class="text-xs text-slate-400 mb-6 leading-relaxed">${item.desc}</p>
+                        <button onclick="startExam('${item.key}')" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition flex items-center justify-center shadow">
+                            <i class="fa-solid fa-play text-xs mr-2"></i> Sinovni Boshlash
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /* VAULT SECTION SWITCHER                                                     */
+        /* -------------------------------------------------------------------------- */
+        function showVaultSection(sectionKey) {
+            const pane = document.getElementById('vault-content-pane');
+
+            ['grammar', 'inversion', 'collocations', 'writing'].forEach(k => {
+                const btn = document.getElementById(`vbtn-${k}`);
+                if (btn) {
+                    if (k === sectionKey) {
+                        btn.className = "w-full text-left p-4 rounded-xl font-bold bg-indigo-600 text-white flex items-center justify-between shadow";
+                    } else {
+                        btn.className = "w-full text-left p-4 rounded-xl font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center justify-between border border-slate-700 transition";
+                    }
+                }
+            });
+
+            if (sectionKey === 'grammar') {
+                pane.innerHTML = `
+                    <h2 class="text-2xl font-black text-white mb-4">A1 - C2 Grammatika Qoidalari</h2>
+                    <div class="space-y-4 text-xs sm:text-sm leading-relaxed">
+                        <div class="p-4 bg-slate-900 rounded-xl border border-slate-700">
+                            <h4 class="font-bold text-indigo-400 text-base mb-1">Conditionals (Shart Ergash Gaplar)</h4>
+                            <p class="mt-1"><strong>Zero Conditional:</strong> If you heat ice, it melts. (Umumiy fizik haqiqat)</p>
+                            <p class="mt-1"><strong>First Conditional:</strong> If it rains tomorrow, I will stay home. (Ehtimolli kelajak)</p>
+                            <p class="mt-1"><strong>Second Conditional:</strong> If I won the lottery, I would buy a house. (Noreal gipotetik hozirgi zamon)</p>
+                            <p class="mt-1"><strong>Third Conditional:</strong> If I had studied harder, I would have passed. (O'tgan zamondagi afsus)</p>
+                        </div>
+                    </div>
+                `;
+            } else if (sectionKey === 'inversion') {
+                pane.innerHTML = `
+                    <h2 class="text-2xl font-black text-white mb-4">Advanced Inversion Structures (C1/C2)</h2>
+                    <div class="space-y-4 text-xs sm:text-sm">
+                        <div class="p-4 bg-slate-900 rounded-xl border border-slate-700">
+                            <h4 class="font-bold text-purple-400 text-base mb-2">Negative Adverbial Inversion</h4>
+                            <p class="mb-2 text-slate-300">Inversion sodir bo'lishi uchun inkor ravish gap boshida kelishi va yordamchi fe'l egadan oldinga o'tishi kerak:</p>
+                            <ul class="list-disc pl-5 space-y-1.5 text-slate-300">
+                                <li><strong>Hardly / Scarcely:</strong> Hardly had I arrived home when the storm started.</li>
+                                <li><strong>Not only... but also:</strong> Not only did he pass the exam, but he also achieved top marks.</li>
+                                <li><strong>Seldom / Rarely:</strong> Seldom have we seen such dedication.</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            } else if (sectionKey === 'collocations') {
+                pane.innerHTML = `
+                    <h2 class="text-2xl font-black text-white mb-4">Academic Collocations & Idioms</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
+                        <div class="p-3 bg-slate-900 rounded-lg border border-slate-700">
+                            <div class="font-bold text-indigo-400">Conduct extensive research</div>
+                            <div class="text-slate-400">Keng ko'lamli tadqiqot o'tkazmoq</div>
+                        </div>
+                        <div class="p-3 bg-slate-900 rounded-lg border border-slate-700">
+                            <div class="font-bold text-indigo-400">Pose a severe threat</div>
+                            <div class="text-slate-400">Jiddiy xavf tug'dirmoq</div>
+                        </div>
+                        <div class="p-3 bg-slate-900 rounded-lg border border-slate-700">
+                            <div class="font-bold text-indigo-400">Play a pivotal role</div>
+                            <div class="text-slate-400">Hal qiluvchi rol o'ynamoq</div>
+                        </div>
+                        <div class="p-3 bg-slate-900 rounded-lg border border-slate-700">
+                            <div class="font-bold text-indigo-400">Bridge the gap</div>
+                            <div class="text-slate-400">Tafovutni qisqartirmoq</div>
+                        </div>
+                    </div>
+                `;
+            } else if (sectionKey === 'writing') {
+                pane.innerHTML = `
+                    <h2 class="text-2xl font-black text-white mb-4">IELTS Essay Templates</h2>
+                    <div class="space-y-4 text-xs sm:text-sm">
+                        <div class="p-4 bg-slate-900 rounded-xl border border-slate-700">
+                            <h4 class="font-bold text-emerald-400 text-base mb-1">Opinion Essay Structure</h4>
+                            <p class="text-slate-300"><strong>Introduction:</strong> Paraphrase statement + Clear Thesis Statement.</p>
+                            <p class="text-slate-300"><strong>Body 1:</strong> Primary supporting argument + real-world example.</p>
+                            <p class="text-slate-300"><strong>Body 2:</strong> Secondary supporting argument + counter-argument rebuttal.</p>
+                            <p class="text-slate-300"><strong>Conclusion:</strong> Restate main arguments using high-level vocabulary.</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /* LANGUAGE SWITCHER                                                          */
+        /* -------------------------------------------------------------------------- */
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'UZ' ? 'EN' : 'UZ';
+            document.getElementById('lang-text').innerText = currentLanguage;
+
+            const dict = i18n[currentLanguage];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) el.innerText = dict[key];
+            });
+        }
+
+        window.onload = function() {
+            switchTab('home');
+        };
+    </script>
+</body>
+</html>
